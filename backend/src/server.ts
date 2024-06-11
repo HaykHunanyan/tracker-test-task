@@ -7,6 +7,7 @@ import { blue, yellow } from 'colorette'
 import { connectDB } from './db'
 import { validateEvents } from './validate'
 import { TrackEvent } from './models/TrackEvent'
+import path from 'path'
 
 dotenv.config()
 
@@ -34,7 +35,7 @@ app.post('/track', async (req, res) => {
 
 app.get('/tracker', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript')
-    res.sendFile(__dirname + '/tracker.js')
+    res.sendFile(path.join(__dirname, '../dist', 'tracker.js'))
 })
 
 connectDB().then(() => {
