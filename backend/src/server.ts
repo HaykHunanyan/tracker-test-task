@@ -8,6 +8,7 @@ import { connectDB } from './db'
 import { validateEvents } from './validate'
 import { TrackEvent } from './models/TrackEvent'
 import path from 'path'
+import cors from 'cors'
 
 dotenv.config()
 
@@ -15,6 +16,14 @@ const app = express()
 const PORT = process.env.PORT || config.get('port')
 
 app.use(bodyParser.json())
+
+app.use(
+    cors({
+        origin: [process.env.frontUrl || config.get('frontUrl')],
+        methods: ['GET', 'POST'],
+        credentials: true
+    })
+)
 
 app.use(corsMiddleware)
 
