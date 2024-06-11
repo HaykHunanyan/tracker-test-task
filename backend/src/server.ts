@@ -5,9 +5,6 @@ import dotenv from 'dotenv'
 import corsMiddleware from './middleware/corsMiddleware'
 import { blue, yellow } from 'colorette'
 import { connectDB } from './db'
-import { validateEvents } from './validate'
-import { TrackEvent } from './models/TrackEvent'
-import path from 'path'
 import cors from 'cors'
 
 dotenv.config()
@@ -27,25 +24,7 @@ app.use(
 
 app.use(corsMiddleware)
 
-app.post('/track', async (req, res) => {
-    const events = req.body
-    if (!validateEvents(events)) {
-        return res.status(422).send('Unprocessable Entity')
-    }
-
-    try {
-        await TrackEvent.insertMany(events)
-        res.status(200).send('OK')
-    } catch (error) {
-        console.error('Error inserting events:', error)
-        res.status(500).send('Internal Server Error')
-    }
-})
-
-app.get('/tracker', (req, res) => {
-    res.setHeader('Content-Type', 'application/javascript')
-    res.sendFile(path.join(__dirname, '../dist', 'tracker.js'))
-})
+app.use('/', require('./api/api.ts'))
 
 connectDB().then(() => {
     app.listen(PORT, () => {
