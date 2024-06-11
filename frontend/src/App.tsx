@@ -2,6 +2,14 @@ import React, { useEffect } from 'react'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { API_ROOT } from './configs/env-vars'
 
+declare global {
+    interface Window {
+        tracker?: {
+            track: (...args: any[]) => void
+        }
+    }
+}
+
 const App: React.FC = () => {
     const navigate = useNavigate()
 
@@ -12,7 +20,10 @@ const App: React.FC = () => {
         document.head.appendChild(script)
 
         script.onload = () => {
-            console.log('script loaded')
+            if (window.tracker) {
+                window.tracker.track('pageview')
+                window.tracker.track('test', 'one', 'two', 'three')
+            }
         }
 
         return () => {
@@ -26,13 +37,21 @@ const App: React.FC = () => {
         path: string
     ) => {
         event.preventDefault()
-        console.log(path, 'path')
-        navigate(path)
+        if (window.tracker) {
+            await window.tracker.track(type, path)
+            navigate(path)
+        }
     }
-
     return (
         <div>
-            <button id="trackButton">Click me</button>
+            <button
+                id="trackButton"
+                onClick={() =>
+                    window.tracker && window.tracker.track('click-button')
+                }
+            >
+                Click me
+            </button>
             <ul>
                 <li>
                     <Link
