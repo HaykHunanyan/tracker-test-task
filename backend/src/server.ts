@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import config from 'config'
 import dotenv from 'dotenv'
+import { connectDB } from './db'
 
 dotenv.config()
 
@@ -10,6 +11,13 @@ const PORT = process.env.PORT || config.get('port')
 
 app.use(bodyParser.json())
 
-app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`)
+app.get('/tracker', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript')
+    res.sendFile(__dirname + '/tracker.js')
+})
+
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`http://localhost:${PORT}`)
+    })
 })
