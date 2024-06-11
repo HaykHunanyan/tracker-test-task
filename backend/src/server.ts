@@ -1,11 +1,15 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+import express from 'express'
+import bodyParser from 'body-parser'
+import config from 'config'
+import dotenv from 'dotenv'
 
-const app = express();
-const PORT = 8888;
+dotenv.config()
 
-app.use(bodyParser.json());
+const app = express()
+const PORT = process.env.PORT || config.get('port')
+
+app.use(bodyParser.json())
 
 app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`);
-});
+    console.log(`http://localhost:${PORT}`)
+})
