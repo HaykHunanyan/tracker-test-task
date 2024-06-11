@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import config from 'config'
 import dotenv from 'dotenv'
+import corsMiddleware from './middleware/corsMiddleware'
 import { blue, yellow } from 'colorette'
 import { connectDB } from './db'
 
@@ -11,6 +12,8 @@ const app = express()
 const PORT = process.env.PORT || config.get('port')
 
 app.use(bodyParser.json())
+
+app.use(corsMiddleware)
 
 app.get('/tracker', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript')
