@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { API_ROOT } from './configs/env-vars'
 
 const App: React.FC = () => {
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const script = document.createElement('script')
+        script.src = `${API_ROOT}/tracker`
+        script.async = true
+        document.head.appendChild(script)
+
+        script.onload = () => {
+            console.log('script loaded')
+        }
+
+        return () => {
+            document.head.removeChild(script)
+        }
+    }, [])
 
     const handleClick = async (
         event: React.MouseEvent<HTMLAnchorElement>,
