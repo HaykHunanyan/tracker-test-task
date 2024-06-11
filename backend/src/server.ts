@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import config from 'config'
 import dotenv from 'dotenv'
+import { blue, yellow } from 'colorette'
 import { connectDB } from './db'
 
 dotenv.config()
@@ -18,6 +19,9 @@ app.get('/tracker', (req, res) => {
 
 connectDB().then(() => {
     app.listen(PORT, () => {
-        console.log(`http://localhost:${PORT}`)
+        console.log(
+            blue('Server is running on'),
+            yellow(`http://localhost:${PORT}`)
+        )
     })
 })
